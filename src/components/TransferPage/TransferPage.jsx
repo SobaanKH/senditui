@@ -268,7 +268,6 @@ function SendPanel({ showToast }) {
     if (!toSend.length || !code) return;
 
     const allFilesMeta = toSend.map(function(f) { return { name: f.name, size: f.size }; });
-    const grand        = sumSize(toSend);
     let   overallSent  = 0;
 
     setPhase("sending");
