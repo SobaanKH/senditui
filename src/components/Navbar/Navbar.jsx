@@ -21,25 +21,24 @@ function Navbar({ page = "home", onNavigate }) {
 
         <ul className="nav-links">
           <li>
-            <a
+            <p
               href="#"
               className={`nav-link${page === "home" ? " active" : ""}`}
               onClick={nav("home")}
             >
               Home
-            </a>
+            </p>
           </li>
           <li>
-            <a
-              href="#"
+            <p
               className={`nav-link${page === "transfer" ? " active" : ""}`}
               onClick={nav("transfer")}
             >
               Transfer
-            </a>
+            </p>
           </li>
           <li>
-            <a href="#" className="nav-link">About</a>
+            <p href="#" className={`nav-link${page === "receive" ? " active" : ""}`} onClick={nav("receive")}>Receive</p>
           </li>
           <li className="nav-link-cta-wrap">
             <button className="nav-cta" onClick={nav("transfer")}>

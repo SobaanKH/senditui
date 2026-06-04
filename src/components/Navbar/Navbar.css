@@ -118,6 +118,7 @@
   transition: color 0.2s ease;
   position: relative;
   padding-bottom: 2px;
+  cursor: pointer;
 }
 
 .nav-link:hover {

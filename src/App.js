@@ -14,6 +14,7 @@ function App() {
 
       {page === "home"  && <Hero onStart={() => setPage("transfer")} />}
       {page === "transfer" && <TransferPage />}
+      {page === "receive" && <TransferPage />}
     </>
   );
 }
