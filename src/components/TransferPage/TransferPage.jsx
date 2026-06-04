@@ -5,7 +5,7 @@ import "./TransferPage.css";
 /* ─────────────────────────────────────────
    Constants
 ───────────────────────────────────────── */
-const SOCKET_URL = "https://sendit-backend-delta.vercel.app";
+const SOCKET_URL = "https://sendit-backend-production.up.railway.app";
 const CHUNK_SIZE = 256 * 1024; // 256 KB
 
 /* ─────────────────────────────────────────
