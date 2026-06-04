@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 18px 24px;
+
+  /* Slide in from top on load */
+  animation: navSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes navSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar {
+  max-width: 1100px;
+  height: 64px;
+  margin: 0 auto;
+  padding: 0 28px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 18px;
+  background: rgba(10, 10, 15, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+
+  font-family: 'Inter', sans-serif;
+
+  /* Subtle border glow on load */
+  animation: navSlideIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) both,
+             borderGlow 3s 1s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% { border-color: rgba(255, 255, 255, 0.07); }
+  50%       { border-color: rgba(167, 139, 250, 0.18); }
+}
+
+/* ── Logo ── */
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.logo:hover {
+  opacity: 0.85;
+  transform: scale(1.04);
+}
+
+.logo-dot {
+  color: #a78bfa;
+  display: inline-block;
+  animation: dotBounce 2.5s ease-in-out infinite;
+}
+
+@keyframes dotBounce {
+  0%, 100% { transform: translateY(0); }
+  45%       { transform: translateY(-3px); }
+  60%       { transform: translateY(1px); }
+}
+
+/* ── Nav links ── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+/* Staggered fade-in for each nav item */
+.nav-links li {
+  opacity: 0;
+  animation: navItemFade 0.4s ease forwards;
+}
+
+.nav-links li:nth-child(1) { animation-delay: 0.2s; }
+.nav-links li:nth-child(2) { animation-delay: 0.3s; }
+.nav-links li:nth-child(3) { animation-delay: 0.4s; }
+.nav-links li:nth-child(4) { animation-delay: 0.5s; }
+
+@keyframes navItemFade {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nav-link {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.2s ease;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Underline grows in on hover */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0%;
+  height: 1.5px;
+  border-radius: 999px;
+  background: #a78bfa;
+  transform: translateX(-50%);
+  transition: width 0.25s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── CTA button ── */
+.nav-cta {
+  background: #a78bfa;
+  color: #1a0f3c;
+  border: none;
+  padding: 9px 20px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.825rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer on CTA */
+.nav-cta::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: ctaShimmer 4s 2s ease-in-out infinite;
+}
+
+@keyframes ctaShimmer {
+  0%       { left: -60%; }
+  35%, 100% { left: 130%; }
+}
+
+.nav-cta:hover {
+  background: #bba4fc;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.3);
+}
+
+.nav-cta:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .header {
+    padding: 14px 16px;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+
+  .nav-link:not(.nav-link-cta-wrap) {
+    display: none;
+  }
+}

@@ -1,0 +1,480 @@
+/* ─────────────────────────────────────────
+   Hero.css — animated version
+───────────────────────────────────────── */
+
+.hero {
+  min-height: 100vh;
+  background: #0a0a0f;
+  color: #ffffff;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 140px 24px 100px;
+  font-family: 'Inter', sans-serif;
+
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Animated grid lines ── */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(167, 139, 250, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(167, 139, 250, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 30%, transparent 100%);
+  animation: gridDrift 20s linear infinite;
+}
+
+@keyframes gridDrift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 60px 60px, 60px 60px; }
+}
+
+/* ── Animated orbs ── */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+
+.hero-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.18) 0%, transparent 65%);
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: orbFloat1 14s ease-in-out infinite;
+}
+
+.hero-orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 65%);
+  bottom: 10%;
+  left: 15%;
+  animation: orbFloat2 18s ease-in-out infinite;
+}
+
+.hero-orb-3 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.1) 0%, transparent 65%);
+  bottom: 20%;
+  right: 10%;
+  animation: orbFloat3 22s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translateX(-50%) translateY(0px) scale(1); }
+  50%       { transform: translateX(-50%) translateY(-30px) scale(1.05); }
+}
+
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(20px, -25px); }
+  66%       { transform: translate(-15px, 15px); }
+}
+
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(0, 0); }
+  40%       { transform: translate(-20px, -20px); }
+  70%       { transform: translate(10px, 10px); }
+}
+
+/* ── Noise texture ── */
+.hero-noise {
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── Main content ── */
+.hero-content {
+  max-width: 860px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Badge ── */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  background: rgba(167, 139, 250, 0.08);
+  border: 1px solid rgba(167, 139, 250, 0.22);
+
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a78bfa;
+
+  margin-bottom: 28px;
+
+  animation: fadeUp 0.6s ease both;
+}
+
+/* Pulsing live dot */
+.badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #a78bfa;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.badge-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: rgba(167, 139, 250, 0.4);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(2); opacity: 0; }
+}
+
+/* ── Title — word-by-word reveal ── */
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 7vw, 4.2rem);
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.hero-title .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(22px);
+  animation: wordReveal 0.5s ease forwards;
+}
+
+.hero-title .word-1  { animation-delay: 0.15s; }
+.hero-title .word-2  { animation-delay: 0.25s; }
+.hero-title .word-3  { animation-delay: 0.35s; }
+.hero-title .word-4  { animation-delay: 0.45s; }
+.hero-title .word-5  { animation-delay: 0.55s; }
+
+@keyframes wordReveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-title .accent {
+  color: #a78bfa;
+}
+
+/* ── Description ── */
+.hero-description {
+  font-size: 0.975rem;
+  color: rgba(255, 255, 255, 0.42);
+  max-width: 400px;
+  line-height: 1.75;
+  font-weight: 400;
+  margin-bottom: 36px;
+
+  opacity: 0;
+  animation: fadeUp 0.6s 0.65s ease forwards;
+}
+
+/* ── Buttons ── */
+.hero-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+
+  opacity: 0;
+  animation: fadeUp 0.6s 0.75s ease forwards;
+}
+
+.primary-btn {
+  background: #a78bfa;
+  color: #0d0718;
+  border: none;
+  padding: 13px 26px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer sweep */
+.primary-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  animation: shimmer 3s 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%   { left: -60%; }
+  40%, 100% { left: 130%; }
+}
+
+.primary-btn:hover {
+  background: #bba4fc;
+  transform: translateY(-2px);
+}
+
+.primary-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.secondary-btn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 13px 26px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.secondary-btn:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+}
+
+.secondary-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ── Drop zone card ── */
+.upload-card {
+  width: 100%;
+  max-width: 460px;
+
+  padding: 40px 28px 32px;
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px dashed rgba(167, 139, 250, 0.28);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+
+  opacity: 0;
+  animation: fadeUp 0.6s 0.9s ease forwards;
+}
+
+/* Corner accent lines */
+.upload-card::before,
+.upload-card::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: rgba(167, 139, 250, 0.4);
+  border-style: solid;
+  transition: all 0.3s ease;
+}
+
+.upload-card::before {
+  top: 14px;
+  left: 14px;
+  border-width: 1.5px 0 0 1.5px;
+  border-radius: 4px 0 0 0;
+}
+
+.upload-card::after {
+  bottom: 14px;
+  right: 14px;
+  border-width: 0 1.5px 1.5px 0;
+  border-radius: 0 0 4px 0;
+}
+
+.upload-card:hover {
+  border-color: rgba(167, 139, 250, 0.6);
+  background: rgba(167, 139, 250, 0.05);
+  transform: translateY(-4px);
+}
+
+.upload-card:hover::before,
+.upload-card:hover::after {
+  border-color: rgba(167, 139, 250, 0.8);
+  width: 40px;
+  height: 40px;
+}
+
+/* ── Upload icon — bobbing ── */
+.upload-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1.5rem;
+  color: #a78bfa;
+  margin-bottom: 16px;
+
+  animation: iconBob 3s ease-in-out infinite;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.upload-card:hover .upload-icon {
+  background: rgba(167, 139, 250, 0.18);
+  border-color: rgba(167, 139, 250, 0.45);
+}
+
+@keyframes iconBob {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+.upload-card h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+  margin-bottom: 6px;
+}
+
+.upload-card p {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 20px;
+}
+
+/* ── Upload button ── */
+.upload-btn {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 18px;
+}
+
+.upload-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+  transform: scale(1.03);
+}
+
+.upload-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Info chips ── */
+.upload-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.chip {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.02em;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  color: rgba(167, 139, 250, 0.9);
+}
+
+/* ── Shared fade-up ── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .hero {
+    padding: 120px 20px 80px;
+  }
+
+  .hero-title {
+    letter-spacing: -1px;
+  }
+
+  .upload-card {
+    padding: 32px 20px 28px;
+  }
+
+  .hero-orb-2,
+  .hero-orb-3 {
+    display: none;
+  }
+}

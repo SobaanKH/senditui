@@ -1,0 +1,320 @@
+/* ─────────────────────────────────────────
+   HowItWorksModal.css
+───────────────────────────────────────── */
+
+/* ── Backdrop ── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(5, 5, 10, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  opacity: 0;
+  animation: backdropIn 0.25s ease forwards;
+}
+
+.modal-backdrop.closing {
+  animation: backdropOut 0.22s ease forwards;
+}
+
+@keyframes backdropIn  { to { opacity: 1; } }
+@keyframes backdropOut { to { opacity: 0; } }
+
+/* ── Modal panel ── */
+.modal {
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #0f0f18;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 26px;
+  padding: 36px 32px 32px;
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+
+  transform: translateY(24px) scale(0.97);
+  opacity: 0;
+  animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(167,139,250,0.2) transparent;
+}
+
+.modal-backdrop.closing .modal {
+  animation: modalOut 0.2s ease forwards;
+}
+
+@keyframes modalIn {
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes modalOut {
+  to { transform: translateY(16px) scale(0.97); opacity: 0; }
+}
+
+/* ── Close button ── */
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 1;
+}
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Header ── */
+.modal-header {
+  margin-bottom: 28px;
+  padding-right: 32px;
+}
+.modal-eyebrow {
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #a78bfa;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.modal-eyebrow-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #a78bfa;
+}
+.modal-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+.modal-title span { color: #a78bfa; }
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.38);
+  line-height: 1.6;
+}
+
+/* ── Tab switcher (Send / Receive) ── */
+.modal-tabs {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 3px;
+  margin-bottom: 24px;
+}
+.modal-tab {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.modal-tab.active {
+  background: rgba(167, 139, 250, 0.13);
+  border: 1px solid rgba(167, 139, 250, 0.24);
+  color: #a78bfa;
+}
+
+/* ── Steps ── */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+  animation: stepsIn 0.25s ease both;
+}
+@keyframes stepsIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: 14px;
+  transition: background 0.2s ease;
+  position: relative;
+}
+.step:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Connector line between steps */
+.step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 27px;
+  bottom: -4px;
+  width: 1.5px;
+  height: 8px;
+  background: rgba(167, 139, 250, 0.2);
+  border-radius: 999px;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid rgba(167, 139, 250, 0.22);
+  color: #a78bfa;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: 'Syne', sans-serif;
+}
+
+.step-body { flex: 1; }
+.step-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  margin-bottom: 3px;
+}
+.step-desc {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.38);
+  line-height: 1.55;
+}
+
+.step-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 28px;
+  text-align: center;
+}
+
+/* ── Divider ── */
+.modal-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 20px 0;
+}
+
+/* ── Features grid ── */
+.features-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.22);
+  margin-bottom: 12px;
+}
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.feature-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.55);
+  transition: all 0.2s ease;
+}
+.feature-pill:hover {
+  background: rgba(167, 139, 250, 0.07);
+  border-color: rgba(167, 139, 250, 0.18);
+  color: rgba(255, 255, 255, 0.8);
+}
+.feature-icon { font-size: 1rem; }
+
+/* ── CTA inside modal ── */
+.modal-cta {
+  width: 100%;
+  padding: 14px;
+  border-radius: 13px;
+  background: #a78bfa;
+  color: #0d0718;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+.modal-cta::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -80%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+  animation: ctaShim 3s 1s ease-in-out infinite;
+}
+@keyframes ctaShim {
+  0% { left: -60%; } 40%,100% { left: 130%; }
+}
+.modal-cta:hover {
+  background: #bba4fc;
+  transform: translateY(-2px);
+}
+.modal-cta:active {
+  transform: scale(0.98);
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .modal {
+    padding: 28px 20px 24px;
+    border-radius: 20px;
+    max-height: 85vh;
+  }
+  .modal-title {
+    font-size: 1.45rem;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+}
