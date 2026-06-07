@@ -6,10 +6,10 @@ import Hero from "./components/Hero/Hero";
 import TransferPage from "./components/TransferPage/TransferPage";
 
 function App() {
-  const params       = new URLSearchParams(window.location.search);
+  const params = new URLSearchParams(window.location.search);
   const sessionParam = params.get("session")?.trim().toUpperCase() || null;
 
-  const [page, setPage]               = useState(sessionParam ? "transfer" : "home");
+  const [page, setPage] = useState(sessionParam ? "transfer" : "home");
   const [initialCode, setInitialCode] = useState(sessionParam);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ function App() {
       const clean = window.location.pathname;
       window.history.replaceState({}, "", clean);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

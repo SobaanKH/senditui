@@ -551,7 +551,7 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
 
   /* ── Join room ── */
   const handleJoin = () => {
-    const trimmed = code.trim().replace(/[·\s\-]/g, "").toUpperCase();
+    const trimmed = code.trim().replace(/[·\s-]/g, "").toUpperCase();
     if (trimmed.length < 4) {
       setCodeError("Code looks too short — double check it.");
       return;
