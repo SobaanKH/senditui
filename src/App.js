@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import Navbar from "./Navbar";
-import Hero from "./Hero";
-import TransferPage from "./TransferPage";
+
 import "./responsive.css";
+import Navbar from "./components/Navbar/Navbar";
+import Hero from "./components/Hero/Hero";
+import TransferPage from "./components/TransferPage/TransferPage";
 
 function App() {
   const params       = new URLSearchParams(window.location.search);
