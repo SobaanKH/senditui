@@ -48,13 +48,13 @@ function formatTime(secs) {
 }
 function fileEmoji(name = "") {
   const ext = name.split(".").pop().toLowerCase();
-  if (["zip","rar","7z","tar","gz"].includes(ext))           return "🗜";
-  if (["jpg","jpeg","png","gif","webp","svg"].includes(ext))  return "🖼";
-  if (["mp4","mov","avi","mkv"].includes(ext))                return "🎬";
-  if (["mp3","wav","flac","aac"].includes(ext))               return "🎵";
-  if (["pdf"].includes(ext))                                  return "📕";
-  if (["doc","docx"].includes(ext))                           return "📝";
-  if (["xls","xlsx"].includes(ext))                           return "📊";
+  if (["zip", "rar", "7z", "tar", "gz"].includes(ext)) return "🗜";
+  if (["jpg", "jpeg", "png", "gif", "webp", "svg"].includes(ext)) return "🖼";
+  if (["mp4", "mov", "avi", "mkv"].includes(ext)) return "🎬";
+  if (["mp3", "wav", "flac", "aac"].includes(ext)) return "🎵";
+  if (["pdf"].includes(ext)) return "📕";
+  if (["doc", "docx"].includes(ext)) return "📝";
+  if (["xls", "xlsx"].includes(ext)) return "📊";
   return "📄";
 }
 
@@ -80,13 +80,13 @@ function useToast() {
 ───────────────────────────────────────── */
 function useSpeedTracker() {
   const samples = useRef([]);
-  const record  = useCallback((bytes) => {
+  const record = useCallback((bytes) => {
     const now = Date.now();
     samples.current.push({ bytes, ts: now });
     samples.current = samples.current.filter((s) => now - s.ts < 1500);
   }, []);
-  const getSpeed  = useCallback(() => {
-    const now    = Date.now();
+  const getSpeed = useCallback(() => {
+    const now = Date.now();
     const window = samples.current.filter((s) => now - s.ts < 1000);
     return window.reduce((sum, s) => sum + s.bytes, 0);
   }, []);
@@ -98,22 +98,22 @@ function useSpeedTracker() {
    SEND PANEL
 ───────────────────────────────────────── */
 function SendPanel({ socket, showToast }) {
-  const [phase, setPhase]         = useState("idle");
-  const [file, setFile]           = useState(null);
-  const [dragOver, setDragOver]   = useState(false);
+  const [phase, setPhase] = useState("idle");
+  const [file, setFile] = useState(null);
+  const [dragOver, setDragOver] = useState(false);
   const [sessionCode, setSessionCode] = useState("");
-  const [timeLeft, setTimeLeft]   = useState(900);
-  const [copied, setCopied]       = useState(false);
+  const [timeLeft, setTimeLeft] = useState(900);
+  const [copied, setCopied] = useState(false);
   const [sentBytes, setSentBytes] = useState(0);
-  const [speed, setSpeed]         = useState(0);
-  const [errorMsg, setErrorMsg]   = useState("");
+  const [speed, setSpeed] = useState(0);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const countdownRef  = useRef(null);
+  const countdownRef = useRef(null);
   const speedInterval = useRef(null);
 
   const sessionCodeRef = useRef("");
-  const phaseRef       = useRef("idle");
-  const fileRef        = useRef(null);
+  const phaseRef = useRef("idle");
+  const fileRef = useRef(null);
 
   const { record, getSpeed, resetSpeed } = useSpeedTracker();
 
@@ -211,7 +211,7 @@ function SendPanel({ socket, showToast }) {
   };
 
   const startChunkedSend = async () => {
-    const f    = fileRef.current;
+    const f = fileRef.current;
     const code = sessionCodeRef.current;
     if (!f || !code) return;
 
@@ -231,7 +231,7 @@ function SendPanel({ socket, showToast }) {
       if (phaseRef.current !== "sending") break;
 
       const start = i * CHUNK_SIZE;
-      const end   = Math.min(start + CHUNK_SIZE, f.size);
+      const end = Math.min(start + CHUNK_SIZE, f.size);
       const chunk = await f.slice(start, end).arrayBuffer();
 
       socket.emit("file-chunk", { code, chunk, chunkIndex: i });
@@ -287,7 +287,7 @@ function SendPanel({ socket, showToast }) {
     setErrorMsg("");
   };
 
-  const pct            = file ? Math.min(Math.round((sentBytes / file.size) * 100), 100) : 0;
+  const pct = file ? Math.min(Math.round((sentBytes / file.size) * 100), 100) : 0;
   const isExpiringSoon = timeLeft <= 120;
 
   return (
@@ -361,7 +361,7 @@ function SendPanel({ socket, showToast }) {
               {isExpiringSoon ? "⚠" : "⏱"} Expires in {formatTime(timeLeft)}
             </div>
           </div>
-          <p style={{ fontSize:"0.75rem", color:"rgba(255,255,255,0.22)", textAlign:"center", lineHeight:1.5 }}>
+          <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,0.22)", textAlign: "center", lineHeight: 1.5 }}>
             Transfer starts automatically once the receiver joins.
           </p>
           <button className="action-btn danger" onClick={handleCancel}>Cancel session</button>
@@ -426,19 +426,19 @@ function SendPanel({ socket, showToast }) {
    RECEIVE PANEL
 ───────────────────────────────────────── */
 function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
-  const [phase, setPhase]               = useState("idle");
-  const [code, setCode]                 = useState(initialCode || "");
-  const [codeError, setCodeError]       = useState("");
+  const [phase, setPhase] = useState("idle");
+  const [code, setCode] = useState(initialCode || "");
+  const [codeError, setCodeError] = useState("");
   const [incomingFile, setIncomingFile] = useState(null);
   const [receivedBytes, setReceivedBytes] = useState(0);
-  const [speed, setSpeed]               = useState(0);
-  const [errorMsg, setErrorMsg]         = useState("");
+  const [speed, setSpeed] = useState(0);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const chunksRef     = useRef([]);   // Array of ArrayBuffers indexed by chunkIndex
-  const fileMetaRef   = useRef(null);
+  const chunksRef = useRef([]);   // Array of ArrayBuffers indexed by chunkIndex
+  const fileMetaRef = useRef(null);
   const speedInterval = useRef(null);
-  const phaseRef      = useRef("idle");
-  const codeRef       = useRef("");
+  const phaseRef = useRef("idle");
+  const codeRef = useRef("");
 
   const { record, getSpeed, resetSpeed } = useSpeedTracker();
 
@@ -496,11 +496,11 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
 
       // Filter out any null slots (shouldn't happen, but safety net)
       const validChunks = chunksRef.current.filter(Boolean);
-      const blob        = new Blob(validChunks, { type: meta.type || "application/octet-stream" });
-      const url         = URL.createObjectURL(blob);
-      const a           = document.createElement("a");
-      a.href            = url;
-      a.download        = meta.name;
+      const blob = new Blob(validChunks, { type: meta.type || "application/octet-stream" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = meta.name;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -562,7 +562,7 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
   const handleReset = () => {
     clearInterval(speedInterval.current);
     resetSpeed();
-    chunksRef.current   = [];
+    chunksRef.current = [];
     fileMetaRef.current = null;
     setCode("");
     codeRef.current = "";
@@ -575,7 +575,7 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
   };
 
   const totalBytes = incomingFile?.size ?? 1;
-  const pct        = Math.min(Math.round((receivedBytes / totalBytes) * 100), 100);
+  const pct = Math.min(Math.round((receivedBytes / totalBytes) * 100), 100);
 
   return (
     <div className="panel-card">
@@ -608,7 +608,7 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
             {codeError && <div className="code-error">⚠ {codeError}</div>}
           </div>
           <div className="panel-divider" />
-          <p style={{ fontSize:"0.76rem", color:"rgba(255,255,255,0.22)", lineHeight:1.6, textAlign:"center" }}>
+          <p style={{ fontSize: "0.76rem", color: "rgba(255,255,255,0.22)", lineHeight: 1.6, textAlign: "center" }}>
             Ask the sender for their 6-character session code.<br />
             Your file transfers directly — nothing is stored.
           </p>
@@ -696,20 +696,19 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
   );
 }
 
-/* ─────────────────────────────────────────
-   MAIN PAGE
-   One socket created here, passed as a
-   prop so both panels share it.
-───────────────────────────────────────── */
+
 function TransferPage({ initialCode, onCodeConsumed, initialTab }) {
-  // If arriving via shared link, default to receive tab
   const [tab, setTab] = useState(initialCode ? "receive" : (initialTab || "send"));
   const { toast, showToast } = useToast();
-  const socketRef            = useRef(null);
+  const socketRef = useRef(null);
 
   if (!socketRef.current) {
     socketRef.current = createSocket();
   }
+
+  useEffect(() => {
+    setTab(initialTab || "send");
+  }, [initialTab]);
 
   useEffect(() => {
     return () => {
@@ -746,7 +745,7 @@ function TransferPage({ initialCode, onCodeConsumed, initialTab }) {
         </div>
 
         {tab === "send"
-          ? <SendPanel    key="send"    socket={socketRef.current} showToast={showToast} />
+          ? <SendPanel key="send" socket={socketRef.current} showToast={showToast} />
           : <ReceivePanel key="receive" socket={socketRef.current} showToast={showToast} initialCode={initialCode} onCodeConsumed={onCodeConsumed} />
         }
       </div>

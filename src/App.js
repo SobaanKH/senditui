@@ -23,7 +23,7 @@ function App() {
 
   return (
     <>
-      <Navbar page={page} onNavigate={(p, tab) => { setPage(p); setInitialCode(null); setInitialTab(tab || "send"); }} />
+      <Navbar page={page} initialTab={initialTab} onNavigate={(p, tab) => { setPage(p); setInitialCode(null); setInitialTab(tab || "send"); }} />
 
       {page === "home" && (
         <Hero onStart={() => setPage("transfer")} />

@@ -1,6 +1,6 @@
 import "./Navbar.css";
 
-function Navbar({ page = "home", onNavigate }) {
+function Navbar({ page = "home", onNavigate, initialTab }) {
   const nav = (target) => (e) => {
     e.preventDefault();
     onNavigate?.(target);
@@ -25,13 +25,16 @@ function Navbar({ page = "home", onNavigate }) {
             </p>
           </li>
           <li>
-            <p href="#" className={`nav-link${page === "transfer" ? " active" : ""}`}
-              onClick={(e) => { e.preventDefault(); onNavigate("transfer", "receive"); }}>
+            <p href="#" className={`nav-link${page === "transfer" && initialTab === "send" ? " active" : ""}`}
+              onClick={(e) => { e.preventDefault(); onNavigate("transfer", "send"); }}>
               Transfer
             </p>
           </li>
           <li>
-            <p href="#" className={`nav-link${page === "receive" ? " active" : ""}`} onClick={nav("receive")}>Receive</p>
+            <p href="#" className={`nav-link${page === "transfer" && initialTab === "receive" ? " active" : ""}`}
+              onClick={(e) => { e.preventDefault(); onNavigate("transfer", "receive"); }}>
+              Receive
+            </p>
           </li>
           <li className="nav-link-cta-wrap">
             <button className="nav-cta" onClick={nav("transfer")}>
