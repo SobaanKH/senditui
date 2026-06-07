@@ -1,10 +1,5 @@
 import "./Navbar.css";
 
-/*
-  Props:
-    page       — "home" | "transfer"
-    onNavigate — (page) => void
-*/
 function Navbar({ page = "home", onNavigate }) {
   const nav = (target) => (e) => {
     e.preventDefault();
@@ -30,10 +25,8 @@ function Navbar({ page = "home", onNavigate }) {
             </p>
           </li>
           <li>
-            <p
-              className={`nav-link${page === "transfer" ? " active" : ""}`}
-              onClick={nav("transfer")}
-            >
+            <p href="#" className={`nav-link${page === "transfer" ? " active" : ""}`}
+              onClick={(e) => { e.preventDefault(); onNavigate("transfer", "receive"); }}>
               Transfer
             </p>
           </li>

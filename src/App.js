@@ -11,6 +11,7 @@ function App() {
 
   const [page, setPage] = useState(sessionParam ? "transfer" : "home");
   const [initialCode, setInitialCode] = useState(sessionParam);
+  const [initialTab, setInitialTab] = useState(sessionParam ? "receive" : "send");
 
   useEffect(() => {
     if (sessionParam) {
@@ -22,17 +23,14 @@ function App() {
 
   return (
     <>
-      <Navbar page={page} onNavigate={(p) => { setPage(p); setInitialCode(null); }} />
+      <Navbar page={page} onNavigate={(p, tab) => { setPage(p); setInitialCode(null); setInitialTab(tab || "send"); }} />
 
       {page === "home" && (
         <Hero onStart={() => setPage("transfer")} />
       )}
 
       {page === "transfer" && (
-        <TransferPage
-          initialCode={initialCode}
-          onCodeConsumed={() => setInitialCode(null)}
-        />
+        <TransferPage initialCode={initialCode} initialTab={initialTab} onCodeConsumed={() => setInitialCode(null)} />
       )}
     </>
   );

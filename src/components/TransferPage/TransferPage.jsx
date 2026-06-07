@@ -110,7 +110,7 @@ function SendPanel({ socket, showToast }) {
 
   const countdownRef  = useRef(null);
   const speedInterval = useRef(null);
-  // Refs so async chunk loop always sees latest values
+
   const sessionCodeRef = useRef("");
   const phaseRef       = useRef("idle");
   const fileRef        = useRef(null);
@@ -122,9 +122,7 @@ function SendPanel({ socket, showToast }) {
   useEffect(() => { sessionCodeRef.current = sessionCode; }, [sessionCode]);
   useEffect(() => { fileRef.current = file; }, [file]);
 
-  /* ── Attach socket listeners once — never re-attach ── */
   useEffect(() => {
-    /* Server confirmed room */
     socket.on("room-created", ({ code }) => {
       setSessionCode(code);
       sessionCodeRef.current = code;
@@ -143,7 +141,6 @@ function SendPanel({ socket, showToast }) {
       }, 1000);
     });
 
-    /* Receiver joined — start sending immediately */
     socket.on("receiver-joined", () => {
       clearInterval(countdownRef.current);
       startChunkedSend();
@@ -172,7 +169,6 @@ function SendPanel({ socket, showToast }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
-  /* ── Helpers ── */
   const stopTransfer = () => {
     clearInterval(countdownRef.current);
     clearInterval(speedInterval.current);
@@ -187,7 +183,6 @@ function SendPanel({ socket, showToast }) {
     showToast("Session expired — create a new one", "error");
   };
 
-  /* ── File pick ── */
   const pickFile = (f) => {
     if (!f) return;
     setFile(f);
@@ -210,13 +205,11 @@ function SendPanel({ socket, showToast }) {
     setPhaseSync("idle");
   };
 
-  /* ── Create room ── */
   const handleCreateRoom = () => {
     setPhaseSync("creating");
     socket.emit("create-room");
   };
 
-  /* ── Chunked send ── */
   const startChunkedSend = async () => {
     const f    = fileRef.current;
     const code = sessionCodeRef.current;
@@ -235,7 +228,6 @@ function SendPanel({ socket, showToast }) {
     });
 
     for (let i = 0; i < totalChunks; i++) {
-      // Abort if user cancelled
       if (phaseRef.current !== "sending") break;
 
       const start = i * CHUNK_SIZE;
@@ -247,11 +239,10 @@ function SendPanel({ socket, showToast }) {
       setSentBytes(end);
       record(end - start);
 
-      // Yield every 10 chunks so UI stays responsive
       if (i % 10 === 0) await new Promise((r) => setTimeout(r, 0));
     }
 
-    if (phaseRef.current !== "sending") return; // was cancelled
+    if (phaseRef.current !== "sending") return;
 
     socket.emit("file-done", { code });
     clearInterval(speedInterval.current);
@@ -260,7 +251,6 @@ function SendPanel({ socket, showToast }) {
     showToast("✓ File delivered!", "success");
   };
 
-  /* ── Cancel ── */
   const handleCancel = () => {
     if (sessionCodeRef.current) {
       socket.emit("transfer-cancelled", { code: sessionCodeRef.current });
@@ -274,7 +264,6 @@ function SendPanel({ socket, showToast }) {
     setSentBytes(0);
   };
 
-  /* ── Copy / share ── */
   const handleCopyCode = () => {
     navigator.clipboard.writeText(sessionCode);
     setCopied(true);
@@ -457,7 +446,6 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
 
   useEffect(() => { codeRef.current = code; }, [code]);
 
-  /* Auto-join when arriving via shared link */
   useEffect(() => {
     if (initialCode && initialCode.length >= 4) {
       const t = setTimeout(() => {
@@ -470,7 +458,6 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* ── Attach all socket listeners once ── */
   useEffect(() => {
     socket.on("join-success", () => {
       setPhaseSync("waiting");
@@ -714,9 +701,9 @@ function ReceivePanel({ socket, showToast, initialCode, onCodeConsumed }) {
    One socket created here, passed as a
    prop so both panels share it.
 ───────────────────────────────────────── */
-function TransferPage({ initialCode, onCodeConsumed }) {
+function TransferPage({ initialCode, onCodeConsumed, initialTab }) {
   // If arriving via shared link, default to receive tab
-  const [tab, setTab]        = useState(initialCode ? "receive" : "send");
+  const [tab, setTab] = useState(initialCode ? "receive" : (initialTab || "send"));
   const { toast, showToast } = useToast();
   const socketRef            = useRef(null);
 
